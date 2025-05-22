@@ -4,8 +4,12 @@ import * as bcrypt from "bcrypt";
 import { IAuthRepository } from "./interfaces/auth-repository.interface";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { LoginUserDto } from "./dto/login-user.dto";
-import { User } from "generated/prisma";
+import { User, Role as PrismaRole } from "generated/prisma";
 import { NotFoundError } from "rxjs";
+import { Payload } from "generated/prisma/runtime/library";
+import { JwtPayload } from "./interfaces/jwt-payload.interface";
+import { Role } from "src/common/enums/role.enums";
+import { UpdateRoleDto } from "./dto/update-role.dto";
 
 @Injectable()
 export class AuthService {
@@ -54,7 +58,13 @@ export class AuthService {
       throw new UnauthorizedException("Invalid email or password");
     }
 
-    const payload = { sub: user.id, email: user.email, role: user.role };
+    const payload: JwtPayload = {
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+      tenantId: "",
+    };
+
     const accessToken = this.jwtService.sign(payload);
 
     const { password, ...userWithoutPassword } = user;
@@ -68,5 +78,9 @@ export class AuthService {
    */
   async findByEmail(email: string): Promise<User | null> {
     return this.authRepo.findUserByEmail(email);
+  }
+
+  async updateRole(updateRoleDto: UpdateRoleDto): Promise<User | null> {
+    return this.authRepo.updateRole(updateRoleDto.email, updateRoleDto.role);
   }
 }

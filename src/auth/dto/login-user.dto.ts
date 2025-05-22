@@ -1,13 +1,6 @@
-import { IsEmail, IsNotEmpty, IsString } from "class-validator";
-import { Role, User } from "generated/prisma";
+import { IsEmail, IsNotEmpty } from "class-validator";
 
-export class LoginUserDto
-  implements
-    Omit<
-      User,
-      "id" | "createdAt" | "updatedAt" | "firstname" | "lastname" | "role"
-    >
-{
+export class LoginUserDto {
   @IsNotEmpty({ message: "Email is required" })
   @IsEmail()
   email: string;

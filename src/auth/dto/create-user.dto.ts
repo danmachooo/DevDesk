@@ -1,22 +1,30 @@
-import { IsEmail, IsNotEmpty, IsString, MinLength } from "class-validator";
-import { Role, User } from "generated/prisma";
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  MinLength,
+  MaxLength,
+  Matches,
+} from "class-validator";
 
-export class CreateUserDto
-  implements Omit<User, "id" | "createdAt" | "updatedAt" | "role">
-{
+export class CreateUserDto {
   @IsString({ message: "Firstname must be string" })
-  @IsNotEmpty({ message: "Firstname is required " })
+  @IsNotEmpty({ message: "Firstname is required" })
   firstname: string;
 
   @IsString({ message: "Lastname must be string" })
-  @IsNotEmpty({ message: "Lastname is required " })
+  @IsNotEmpty({ message: "Lastname is required" })
   lastname: string;
 
   @IsNotEmpty({ message: "Email is required" })
   @IsEmail()
   email: string;
 
-  @IsNotEmpty({ message: "Password is required" })
-  @MinLength(6, { message: "Password must be atleast 6 characters" })
+  @IsString()
+  @MinLength(8)
+  @MaxLength(32)
+  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+    message: "Password is too weak",
+  })
   password: string;
 }
