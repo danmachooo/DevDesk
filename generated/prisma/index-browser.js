@@ -128,12 +128,18 @@ exports.Prisma.UserScalarFieldEnum = {
   lastname: 'lastname',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
   role: 'role'
 };
 
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
 };
 
 exports.Prisma.UserOrderByRelevanceFieldEnum = {

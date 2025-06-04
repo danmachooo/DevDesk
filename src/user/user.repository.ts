@@ -2,14 +2,22 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { User } from "generated/prisma";
 import { PrismaService } from "src/prisma/prisma.service";
 import { Role } from "src/common/enums/role.enums";
-import { IUserRepository } from "./interfaces/user-repository.interface";
+import {
+  CreateUser,
+  IUserManager,
+  SafeUser,
+  UpdateRole,
+  UpdateUser,
+} from "./interfaces/user-repository.interface";
 import { CreateUserDto } from "./dto/create-user-dto";
 import { UpdateUserDto } from "./dto/update-user-dto";
+import { UpdateRoleDto } from "./dto/update-role.dto";
+import { sanitizeUser } from "./utils/sanitize-user";
 
 @Injectable()
-export class UserRepository implements IUserRepository {
+export class UserRepository implements IUserManager {
   constructor(private readonly prisma: PrismaService) {}
-  async create(user: CreateUserDto): Promise<User> {
+  async create(user: CreateUserDto): Promise<CreateUser> {
     const createdUser = await this.prisma.user.create({
       data: {
         firstname: user.firstname,
@@ -18,10 +26,18 @@ export class UserRepository implements IUserRepository {
         password: user.password,
       },
     });
-    return createdUser;
+
+    return {
+      id: createdUser.id,
+      email: createdUser.email,
+      firstname: createdUser.firstname,
+      lastname: createdUser.lastname,
+      role: createdUser.role,
+      createdAt: createdUser.createdAt,
+    };
   }
 
-  async update(user: UpdateUserDto): Promise<User> {
+  async update(user: UpdateUserDto): Promise<UpdateUser> {
     const updatedUser = await this.prisma.user.update({
       data: {
         firstname: user.firstname,
@@ -31,44 +47,61 @@ export class UserRepository implements IUserRepository {
         id: user.id,
       },
     });
-    return updatedUser;
+    return {
+      id: updatedUser.id,
+      firstname: updatedUser.firstname,
+      lastname: updatedUser.lastname,
+      updatedAt: updatedUser.updatedAt,
+    };
   }
 
-  async delete(id: string): Promise<User> {
-    const deletedUser = this.prisma.user.delete({
-      where: {
-        id: id,
-      },
+  async softDelete(id: string): Promise<SafeUser | null> {
+    const user = await this.prisma.user.update({
+      where: { id },
+      data: { deletedAt: new Date() },
     });
-
-    return deletedUser;
+    return sanitizeUser(user);
   }
 
-  async findByEmail(email: string): Promise<User | null> {
-    const userFoundByEmail = await this.prisma.user.findUnique({
-      where: { email },
+  async hardDelete(id: string): Promise<SafeUser | null> {
+    const { password, ...safeUser } = await this.prisma.user.delete({
+      where: { id },
     });
-    if (!userFoundByEmail) {
+    return safeUser;
+  }
+  async findByEmail(email: string): Promise<User> {
+    const user = await this.prisma.user.findUnique({ where: { email } });
+
+    if (!user) {
       throw new NotFoundException(
         `User with an email of ${email} is not found.`
       );
     }
-    return userFoundByEmail;
-  }
-  async findById(id: string): Promise<User | null> {
-    const userFoundById = await this.prisma.user.findUnique({ where: { id } });
-    if (!userFoundById) {
-      throw new NotFoundException(`User with an id of ${id} is not found.`);
-    }
-    return userFoundById;
+
+    return user;
   }
 
-  async updateRole(email: string, role: Role): Promise<User | null> {
+  async findById(id: string): Promise<SafeUser> {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+
+    if (!user) {
+      throw new NotFoundException(`User with an id of ${id} is not found.`);
+    }
+
+    return sanitizeUser(user);
+  }
+
+  async updateRole(updateRoleDto: UpdateRoleDto): Promise<UpdateRole> {
+    const { email, role } = updateRoleDto;
     const userRoleUpdated = await this.prisma.user.update({
       where: { email },
       data: { role },
     });
 
-    return userRoleUpdated;
+    return {
+      id: userRoleUpdated.id,
+      firstname: userRoleUpdated.firstname,
+      role: userRoleUpdated.role,
+    };
   }
 }
