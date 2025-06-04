@@ -23,6 +23,7 @@ import { Role } from "src/common/enums/role.enums";
 import { JwtPayload } from "./interfaces/jwt-payload.interface";
 import { RequestWithUser } from "src/common/types/request-with-user";
 import { CreateUserDto } from "src/user/dto/create-user-dto";
+import { CreateUser } from "src/user/interfaces/user-repository.interface";
 
 @Controller("auth")
 export class AuthController {
@@ -32,13 +33,11 @@ export class AuthController {
   @HttpCode(201)
   async register(
     @Body() createUserDto: CreateUserDto
-  ): Promise<{ message: string; user: Partial<User> }> {
+  ): Promise<{ message: string; user: CreateUser }> {
     const user = await this.authService.create(createUserDto);
-    const { password, ...safeUser } = user;
-
     return {
       message: "You are now registered!",
-      user: safeUser,
+      user: user,
     };
   }
 

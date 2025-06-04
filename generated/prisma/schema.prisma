@@ -15,14 +15,15 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
+  id        String    @id @default(uuid())
+  email     String    @unique
   password  String
   firstname String
   lastname  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  role      Role     @default(AGENT)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  role      Role      @default(AGENT)
 }
 
 enum Role {

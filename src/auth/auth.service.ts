@@ -5,13 +5,19 @@ import { LoginUserDto } from "./dto/login-user.dto";
 import { User, Role as PrismaRole } from "generated/prisma";
 import { JwtPayload } from "./interfaces/jwt-payload.interface";
 import { CreateUserDto } from "src/user/dto/create-user-dto";
-import { IUserRepository } from "src/user/interfaces/user-repository.interface";
+import {
+  CreateUser,
+  IUserManager,
+  UpdateRole,
+} from "src/user/interfaces/user-repository.interface";
 import { UpdateRoleDto } from "src/user/dto/update-role.dto";
+import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class AuthService {
   constructor(
-    @Inject("IUserRepository") private readonly userRepo: IUserRepository,
+    private readonly configService: ConfigService,
+    @Inject("IUserManager") private readonly userManager: IUserManager,
     private readonly jwtService: JwtService
   ) {}
 
@@ -19,14 +25,19 @@ export class AuthService {
    * Creates a new user
    * @param createUserDto User data
    */
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+  async create(createUserDto: CreateUserDto): Promise<CreateUser> {
+    const saltRounds = this.configService.get<number>("SALT") ?? 10;
+
+    const hashedPassword = await bcrypt.hash(
+      createUserDto.password,
+      saltRounds
+    );
 
     const userData = {
       ...createUserDto,
       password: hashedPassword,
     };
-    const user = await this.userRepo.create(userData);
+    const user = await this.userManager.create(userData);
 
     return user;
   }
@@ -41,7 +52,7 @@ export class AuthService {
    */
 
   async login(loginUserDto: LoginUserDto): Promise<{ accessToken: string }> {
-    const user = await this.findByEmail(loginUserDto.email);
+    const user = await this.userManager.findByEmail(loginUserDto.email);
     if (!user) {
       throw new UnauthorizedException("Invalid email or password");
     }
@@ -69,18 +80,9 @@ export class AuthService {
    * Retrieves a User by email
    * @param email User email
    */
-  async findByEmail(email: string): Promise<User | null> {
-    const user = await this.userRepo.findByEmail(email);
-    if (!user) {
-      throw new UnauthorizedException("Invalid email or password");
-    }
-    return user;
-  }
 
-  async updateRole(updateRoleDto: UpdateRoleDto): Promise<User | null> {
-    const user = await this.findByEmail(updateRoleDto.email);
-
-    return this.userRepo.updateRole(updateRoleDto.email, updateRoleDto.role);
+  async updateRole(updateRoleDto: UpdateRoleDto): Promise<UpdateRole> {
+    return this.userManager.updateRole(updateRoleDto);
   }
 
   async signToken(payload: JwtPayload): Promise<{ accessToken: string }> {

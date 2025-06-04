@@ -897,6 +897,7 @@ export namespace Prisma {
     lastname: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    deletedAt: Date | null
     role: $Enums.Role | null
   }
 
@@ -908,6 +909,7 @@ export namespace Prisma {
     lastname: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    deletedAt: Date | null
     role: $Enums.Role | null
   }
 
@@ -919,6 +921,7 @@ export namespace Prisma {
     lastname: number
     createdAt: number
     updatedAt: number
+    deletedAt: number
     role: number
     _all: number
   }
@@ -932,6 +935,7 @@ export namespace Prisma {
     lastname?: true
     createdAt?: true
     updatedAt?: true
+    deletedAt?: true
     role?: true
   }
 
@@ -943,6 +947,7 @@ export namespace Prisma {
     lastname?: true
     createdAt?: true
     updatedAt?: true
+    deletedAt?: true
     role?: true
   }
 
@@ -954,6 +959,7 @@ export namespace Prisma {
     lastname?: true
     createdAt?: true
     updatedAt?: true
+    deletedAt?: true
     role?: true
     _all?: true
   }
@@ -1038,6 +1044,7 @@ export namespace Prisma {
     lastname: string
     createdAt: Date
     updatedAt: Date
+    deletedAt: Date | null
     role: $Enums.Role
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
@@ -1066,6 +1073,7 @@ export namespace Prisma {
     lastname?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
     role?: boolean
   }, ExtArgs["result"]["user"]>
 
@@ -1079,10 +1087,11 @@ export namespace Prisma {
     lastname?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    deletedAt?: boolean
     role?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "password" | "firstname" | "lastname" | "createdAt" | "updatedAt" | "role", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "password" | "firstname" | "lastname" | "createdAt" | "updatedAt" | "deletedAt" | "role", ExtArgs["result"]["user"]>
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
@@ -1095,6 +1104,7 @@ export namespace Prisma {
       lastname: string
       createdAt: Date
       updatedAt: Date
+      deletedAt: Date | null
       role: $Enums.Role
     }, ExtArgs["result"]["user"]>
     composites: {}
@@ -1472,6 +1482,7 @@ export namespace Prisma {
     readonly lastname: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
+    readonly deletedAt: FieldRef<"User", 'DateTime'>
     readonly role: FieldRef<"User", 'Role'>
   }
     
@@ -1816,6 +1827,7 @@ export namespace Prisma {
     lastname: 'lastname',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt',
     role: 'role'
   };
 
@@ -1828,6 +1840,14 @@ export namespace Prisma {
   };
 
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+  export const NullsOrder: {
+    first: 'first',
+    last: 'last'
+  };
+
+  export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
   export const UserOrderByRelevanceFieldEnum: {
@@ -1888,6 +1908,7 @@ export namespace Prisma {
     lastname?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"User"> | Date | string | null
     role?: EnumRoleFilter<"User"> | $Enums.Role
   }
 
@@ -1899,6 +1920,7 @@ export namespace Prisma {
     lastname?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
     role?: SortOrder
     _relevance?: UserOrderByRelevanceInput
   }
@@ -1914,6 +1936,7 @@ export namespace Prisma {
     lastname?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"User"> | Date | string | null
     role?: EnumRoleFilter<"User"> | $Enums.Role
   }, "id" | "email">
 
@@ -1925,6 +1948,7 @@ export namespace Prisma {
     lastname?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
     role?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -1942,6 +1966,7 @@ export namespace Prisma {
     lastname?: StringWithAggregatesFilter<"User"> | string
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     role?: EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
   }
 
@@ -1953,6 +1978,7 @@ export namespace Prisma {
     lastname: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     role?: $Enums.Role
   }
 
@@ -1964,6 +1990,7 @@ export namespace Prisma {
     lastname: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     role?: $Enums.Role
   }
 
@@ -1975,6 +2002,7 @@ export namespace Prisma {
     lastname?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
   }
 
@@ -1986,6 +2014,7 @@ export namespace Prisma {
     lastname?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
   }
 
@@ -1997,6 +2026,7 @@ export namespace Prisma {
     lastname: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    deletedAt?: Date | string | null
     role?: $Enums.Role
   }
 
@@ -2008,6 +2038,7 @@ export namespace Prisma {
     lastname?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
   }
 
@@ -2019,6 +2050,7 @@ export namespace Prisma {
     lastname?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
   }
 
@@ -2048,11 +2080,27 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | null
+    notIn?: Date[] | string[] | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type EnumRoleFilter<$PrismaModel = never> = {
     equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
     in?: $Enums.Role[]
     notIn?: $Enums.Role[]
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
   }
 
   export type UserOrderByRelevanceInput = {
@@ -2069,6 +2117,7 @@ export namespace Prisma {
     lastname?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
     role?: SortOrder
   }
 
@@ -2080,6 +2129,7 @@ export namespace Prisma {
     lastname?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
     role?: SortOrder
   }
 
@@ -2091,6 +2141,7 @@ export namespace Prisma {
     lastname?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    deletedAt?: SortOrder
     role?: SortOrder
   }
 
@@ -2126,6 +2177,20 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | null
+    notIn?: Date[] | string[] | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
   export type EnumRoleWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
     in?: $Enums.Role[]
@@ -2142,6 +2207,10 @@ export namespace Prisma {
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
   }
 
   export type EnumRoleFieldUpdateOperationsInput = {
@@ -2172,6 +2241,17 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | null
+    notIn?: Date[] | string[] | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type NestedEnumRoleFilter<$PrismaModel = never> = {
@@ -2222,6 +2302,31 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | null
+    notIn?: Date[] | string[] | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedEnumRoleWithAggregatesFilter<$PrismaModel = never> = {
